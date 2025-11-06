@@ -1,0 +1,9 @@
+{
+    // 可以使用export default 导出组件
+    // "rules": {
+    //     "import/no-anonymous-default-export":["error",{
+    //         "allowAnonymousFunction": true,
+    //         "allowCallExpression":true
+    //     }]
+    // }
+}
