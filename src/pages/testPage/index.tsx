@@ -1,10 +1,14 @@
 import { Button, Spin } from "antd"
 import { useState } from "react"
 import CustomButton from '../../components/testButton'
+import { useLoading } from "../../context/LoadingContext"
 
 const TestPage = () => {
     const [count, setCount] = useState(0)
     const [loading, setLoading] = useState(false)
+    const { loadingInit, startLoading, stopLoading } = useLoading()
+
+    console.log(loadingInit, startLoading, stopLoading, 'lllll');
 
 
     const fetchData = (): Promise<number> => {
@@ -17,6 +21,7 @@ const TestPage = () => {
 
 
     const onClick = async () => {
+        startLoading()
         setLoading(true)
         console.log('1.同步的setLoading', loading);
         try {
@@ -27,6 +32,7 @@ const TestPage = () => {
             // ...
         } finally {
             setLoading(false)
+            stopLoading()
         }
     }
 
@@ -37,7 +43,9 @@ const TestPage = () => {
             <span>{`${loading}`}</span>
             <p>{count}</p>
             <Button type="primary">单击按钮</Button>
-            <CustomButton onClick={onClick} label={"点我试试呢"} />
+            <Spin spinning={loadingInit}>
+                <CustomButton onClick={onClick} label={"点我试试呢"} />
+            </Spin>
         </Spin>
     )
 }
