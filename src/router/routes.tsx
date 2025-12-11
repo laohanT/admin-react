@@ -10,6 +10,7 @@ const MenuManage = lazy(() => import('../pages/menuManage'))
 const RolesManage = lazy(() => import('../pages/rolesManage'))
 const AccountManage = lazy(() => import('../pages/accountManage'))
 const TestPage = lazy(() => import("../pages/testPage"))
+import { LoadingProvider } from "../context/LoadingContext";
 interface RouteConfig {
     path: string,
     element?: ReactNode,
@@ -32,7 +33,7 @@ export const routes: RouteConfig[] = [
     {
         path: "/test-page",
         name: "测试页面",
-        element: <TestPage />,
+        element: <LoadingProvider><TestPage /></LoadingProvider>,
         hidden: true
     },
 
