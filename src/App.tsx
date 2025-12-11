@@ -1,28 +1,22 @@
-import React from 'react';
+import { useEffect } from 'react';
 import './App.css';
-import routes from './router/routes';
-import { useLocation, useRoutes } from 'react-router';
-import Layout from './layout/layout';
-const AppRoutes = () => {
-  const routing = useRoutes(routes);
-  return routing;
-}
+import { RouterProvider } from 'react-router';
+import { getPublickKey } from './api/public';
+import { useDispatch } from 'react-redux';
+import { setPublicKey } from './store/slice/cryptoSlice';
+import router from './router/routes';
 function App() {
-  const router = useLocation()
-  const isLogin = router.pathname.indexOf('login') >= 0
-  return (
-    <div >
-      {
-        isLogin ? <AppRoutes />
-          : <Layout>
-            <AppRoutes />
-          </Layout>
-      }
+  const dispatch = useDispatch()
+  // 获取rsakey
+  const fetchRsaKey = async () => {
+    const res = await getPublickKey()
+    dispatch(setPublicKey(res.data.pubKey))
+  }
+  useEffect(() => {
+    fetchRsaKey()
+  }, [])
+  return <RouterProvider router={router} />
 
-
-    </div>
-  );
 }
-
 export default App;
 

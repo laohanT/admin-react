@@ -1,32 +1,11 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Button, Dropdown, MenuProps } from "antd"
-import { useState } from "react";
+import { Button, Dropdown, MenuProps, Spin } from "antd"
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { checkLogin, loginout } from "../../store/slice/authSlice";
+import { useNavigate } from "react-router";
 
-const items: MenuProps['items'] = [
-    {
-        label: (
-            <a href="https://www.antgroup.com" target="_blank" rel="noopener noreferrer">
-                1st menu item
-            </a>
-        ),
-        key: '0',
-    },
-    {
-        label: (
-            <a href="https://www.aliyun.com" target="_blank" rel="noopener noreferrer">
-                2nd menu item
-            </a>
-        ),
-        key: '1',
-    },
-    {
-        type: 'divider',
-    },
-    {
-        label: '3rd menu item',
-        key: '3',
-    },
-];
+
 
 const styleObj: React.CSSProperties = {
     display: "flex",
@@ -37,9 +16,50 @@ type HeaderProps = {
     collapsed: boolean,
     toggleCollapsed: () => void
 }
+
+
+
 const Header = ({ collapsed, toggleCollapsed }: HeaderProps) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { isCheck } = useSelector((state: any) => state.auth)
+    // 退出登录
+    const clickLoginout = () => {
+        dispatch(loginout())
+        navigate('/login', { replace: true })
+    }
 
+    useEffect(() => {
+        dispatch(checkLogin())
+    }, [])
 
+    const items: MenuProps['items'] = [
+        {
+            label: (
+                <span onClick={clickLoginout}>
+                    退出登录
+                </span>
+            ),
+            key: '0',
+        },
+        {
+            label: (
+                <a href="https://www.aliyun.com" target="_blank" rel="noopener noreferrer">
+                    2nd menu item
+                </a>
+            ),
+            key: '1',
+        },
+        {
+            type: 'divider',
+        },
+        {
+            label: '3rd menu item',
+            key: '3',
+        },
+    ];
+
+    if (!isCheck) return <Spin spinning={true}>加载中</Spin>
     return (
         <div style={styleObj}>
             <Button type="primary" onClick={toggleCollapsed} style={{ marginBottom: 16 }}>

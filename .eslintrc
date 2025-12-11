@@ -1,4 +1,4 @@
-{
+// {
     // 可以使用export default 导出组件
     // "rules": {
     //     "import/no-anonymous-default-export":["error",{
@@ -6,4 +6,15 @@
     //         "allowCallExpression":true
     //     }]
     // }
+    
+// }
+{
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    }
 }

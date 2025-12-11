@@ -19,7 +19,7 @@ export const counterSlice = createSlice({
         }
     }
 })
-console.log(counterSlice.actions, counterSlice, 'counterSlice.actions');
+// console.log(counterSlice.actions, counterSlice, 'counterSlice.actions');
 
 export const { increment, decrement, incrementByAmount } = counterSlice.actions
 export default counterSlice.reducer

@@ -1,24 +1,25 @@
-import { ApplicationMenu, Home, System } from "@icon-park/react";
+import { ApplicationMenu, Home, Permissions, System, User } from "@icon-park/react";
 import { lazy, ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import Layout from "../layout/layout";
+import CheckLogin from "../components/checkLogin";
 const Login = lazy(() => import("../pages/Login"))
 const HomePage = lazy(() => import("../pages/weclome"))
 const StorePage = lazy(() => import("../pages/counter"))
+const MenuManage = lazy(() => import('../pages/menuManage'))
+const RolesManage = lazy(() => import('../pages/rolesManage'))
+const AccountManage = lazy(() => import('../pages/accountManage'))
+const TestPage = lazy(() => import("../pages/testPage"))
 interface RouteConfig {
     path: string,
     element?: ReactNode,
     name?: string,
     icon?: ReactNode,
     children?: RouteConfig[],
-    hidden?: boolean
-
+    hidden?: boolean, // 是否在侧边栏隐藏菜单
 }
 
-const routes: RouteConfig[] = [
-    {
-        path: "/",
-        element: <Navigate to={"/home"} />
-    },
+export const routes: RouteConfig[] = [
 
     {
         path: "/login",
@@ -29,33 +30,63 @@ const routes: RouteConfig[] = [
     },
 
     {
-        path: "/home",
+        path: "/test-page",
+        name: "测试页面",
+        element: <TestPage />,
+        hidden: true
+    },
+
+    {
+        path: "/",
+        element: <CheckLogin><Layout /></CheckLogin>,
         name: "首页",
         icon: <Home theme="outline" size="18" />,
-        element: <HomePage />
+        children: [
+            {
+                path: "home",
+                name: "首页",
+                element: <HomePage />,
+                hidden: true
+            },
+            {
+                path: "",
+                element: <Navigate to={'home'}></Navigate>,
+                hidden: true
+            }
+        ]
     },
+
     {
         path: "/system",
         name: "系统管理",
+        element: <Layout />,
         icon: <System theme="outline" size="18" />,
         children: [
             {
                 path: "menuList",
                 name: "菜单管理",
                 icon: <ApplicationMenu theme="outline" size="18" />,
-                element: <HomePage />,
+                element: <MenuManage />,
 
             },
-            // {
-            //     path: "users",
-            //     icon: <People theme="outline" size="18" />,
-            //     element: <Hello />,
-            //     name: "成员管理",
-            // },
+            {
+                path: "roleManage",
+                name: "角色管理",
+                icon: <Permissions theme="outline" size="18" />,
+                element: <RolesManage />,
+            },
+
+            {
+                path: "accountManage",
+                name: "账户管理",
+                icon: <User theme="outline" size="18" />,
+                element: <AccountManage />,
+            },
             {
                 path: "counter",
                 element: <StorePage />,
                 name: "Store测试",
+                hidden: true
             }
         ]
     }
@@ -87,15 +118,21 @@ const handleRoutes = (routes: RouteConfig[]): MenuItem[] => {
         if (!item.hidden) {
             routesArr.push(menuItem)
         }
-        routesArr = routesArr.filter(item => item.key !== '/')
+        // routesArr = routesArr.filter(item => item.key !== '/')
     })
     return routesArr
 }
 
+// 建立路由表
+const router = createBrowserRouter(routes)
 
+
+router.subscribe((state) => {
+    console.log(state, '路由subscribe');
+})
 
 export const menuItems = handleRoutes(routes)
-export default routes
+export default router
 
 
 

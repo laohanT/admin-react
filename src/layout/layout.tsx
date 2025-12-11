@@ -4,6 +4,8 @@ import Sider from "antd/es/layout/Sider"
 import { ReactNode, useState } from "react"
 import CustomMenu from "../components/menu"
 import CustomHeader from '../components/header'
+import CustomTags from '../components/tabs'
+import { Outlet } from "react-router"
 
 interface LayoutProps {
     children: ReactNode
@@ -17,7 +19,7 @@ const headerStyle: React.CSSProperties = {
     backgroundColor: "#fff",
     padding: "0 20px",
 }
-export default ({ children }: LayoutProps) => {
+export default () => {
     const [collapsed, setCollapsed] = useState(false)
     const toggleCollapsed = () => {
         setCollapsed(!collapsed)
@@ -33,7 +35,9 @@ export default ({ children }: LayoutProps) => {
                     <Header style={headerStyle}>
                         <CustomHeader collapsed={collapsed} toggleCollapsed={toggleCollapsed} />
                     </Header>
-                    <Content>{children}</Content>
+                    <CustomTags />
+                    {/* <Content>{children}</Content> */}
+                    <Content> <Outlet /> </Content>
                     {/* <Footer >Footer</Footer> */}
                 </Layout>
             </Layout>
